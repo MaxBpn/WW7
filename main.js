@@ -39,7 +39,9 @@ MongoClient.connect(dbUrl.url, function (error, client) {
 
 app.post('/addFavori', function(req,res) {
 
-  
+  console.log('Add favori');
+  console.log(req.body);
+
   if (req.body) {
     var token = req.body.headers['x-access-token'];
     console.log('token recu' +token);
@@ -48,7 +50,7 @@ app.post('/addFavori', function(req,res) {
    var decoded = jwt.verify(token, settings.secret);
    console.log(decoded.id);
 
-   db.collection("users").update({'username':decoded.id}, {$push : {favoris: req.body.name}});
+   db.collection("users").update({'username':decoded.id}, {$push : {favoris: req.body.id}});
 
    res.send({success: true});
   }
@@ -67,11 +69,10 @@ app.get('/favoris', function(req,res) {
     if (err) throw err;
       if (result[0]) {
           console.log('Looking for favs');
-          console.log(result[0].favoris);
           db.collection("movies").find({id: {$in:result[0].favoris}}).toArray(function (error,results) {
             if (error) throw error;
             res.status(200).send(JSON.stringify(results));
-            console.log(results);
+            
           });
       }
    });

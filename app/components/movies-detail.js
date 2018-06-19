@@ -2,6 +2,8 @@ if (!window.VueWW) {
     window.VueWW = {};
 }
 
+var m;
+
 window.VueWW.moviesDetail = {
     data: function() {
 	    return {  
@@ -37,6 +39,8 @@ window.VueWW.moviesDetail = {
             fetchResult = await fetch(`../data/movies/details/${id}.json`);
             if (fetchResult.status == 200) {
                 this.movie = await fetchResult.json();
+                console.log(this.movie.name);
+                m=this.movie;
             }
             this.mainImg = `../../data/movies/${this.movie.img}`;
         },
@@ -50,7 +54,7 @@ window.VueWW.moviesDetail = {
 		    	<img class="pull-right back" src="../../img/back.png">
 		    </a>
 		    <a href="#">
-		    	<span class="pull-right back fa fa-heart" id="favBouton" href="#" onclick="ajouterFavoris('WonderWoman')"></span>
+		    	<span class="pull-right back fa fa-heart" id="favBouton" href="#" onclick="ajouterFavoris()"></span>
 		    </a>
 		    <h1 class="name">{{ movie.name }}</h1>
 		    <img class="pull-right img" v-bind:src="mainImg">
@@ -111,15 +115,15 @@ window.VueWW.moviesDetail = {
     `,
 };
 
-function ajouterFavoris (name) {
-	console.log(name)
+function ajouterFavoris () {
+	console.log(m)
 	if((document.getElementById("favBouton").style.color)=='red'){
 		document.getElementById("favBouton").style.color="black";
 	} else {
 		document.getElementById("favBouton").style.color="red";
 		console.log('sending : ' + localStorage.getItem('jwtToken'));
 		this.axios.post('http://localhost:8080/addFavori', {
-                headers: {'x-access-token': localStorage.getItem('jwtToken')}, name:name
+                headers: {'x-access-token': localStorage.getItem('jwtToken')}, id:m.id
                 })
             .then(response => {
                 alert("Film ajouté aux favoris !");
