@@ -8,6 +8,18 @@ window.VueWW.signOutPage = {
         };
     },
     computed: {},
+    methods:{
+        logout () {
+            localStorage.removeItem('jwtToken')
+            console.log(localStorage.getItem('jwtToken'))
+            this.$router.push({
+                path:'/signOut'
+            })
+        }
+    },
+    beforeMount() {
+        this.logout()
+    },
     template:  `
         <div>
     		<div> 

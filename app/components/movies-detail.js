@@ -50,7 +50,7 @@ window.VueWW.moviesDetail = {
 		    	<img class="pull-right back" src="../../img/back.png">
 		    </a>
 		    <a href="#">
-		    	<span class="pull-right back fa fa-heart" id="favBouton" href="#" onclick="ajouterFavoris(movie.name)"></span>
+		    	<span class="pull-right back fa fa-heart" id="favBouton" href="#" onclick="ajouterFavoris('WonderWoman')"></span>
 		    </a>
 		    <h1 class="name">{{ movie.name }}</h1>
 		    <img class="pull-right img" v-bind:src="mainImg">
@@ -117,9 +117,10 @@ function ajouterFavoris (name) {
 		document.getElementById("favBouton").style.color="black";
 	} else {
 		document.getElementById("favBouton").style.color="red";
-		this.axios.post('http://localhost:8080/favoris', {
-                headers: {'x-access-token': localStorage.getItem('jwtToken')}
-                },name)
+		console.log('sending : ' + localStorage.getItem('jwtToken'));
+		this.axios.post('http://localhost:8080/addFavori', {
+                headers: {'x-access-token': localStorage.getItem('jwtToken')}, name:name
+                })
             .then(response => {
                 alert("Film ajouté aux favoris !");
                 var nextPath;

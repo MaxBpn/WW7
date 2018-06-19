@@ -15,6 +15,8 @@ window.VueWW.signInPage = {
             this.axios.post('http://localhost:8080/signin', this.login)
             .then(response => {
                 alert(response.data.msg);
+                localStorage.setItem('jwtToken', response.data.token)
+                console.log('token : ' + localStorage.getItem('jwtToken'))
                 var nextPath;
                 if(response.data.success){
                     nextPath="/home";

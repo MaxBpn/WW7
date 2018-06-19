@@ -37,13 +37,18 @@ MongoClient.connect(dbUrl.url, function (error, client) {
 
 });
 
-app.post('/favoris', function(req,res) {
-  if (req.body.titre) {
-    var token = req.headers['x-access-token'];
+app.post('/addFavori', function(req,res) {
+
+  
+  if (req.body) {
+    var token = req.body.headers['x-access-token'];
+    console.log('token recu' +token);
+
    
    var decoded = jwt.verify(token, settings.secret);
+   console.log(decoded.id);
 
-   db.collection("users").update({'username':decoded.id}, {$push : {favoris: req.body}});
+   db.collection("users").update({'username':decoded.id}, {$push : {favoris: req.body.name}});
 
    res.send({success: true});
   }
@@ -61,9 +66,12 @@ app.get('/favoris', function(req,res) {
    db.collection("users").find({'username':decoded.id}).toArray(function(err, result) {
     if (err) throw err;
       if (result[0]) {
-          db.collection("movies").find({'name': {$all:result[0].favoris}}).toArray(function (error,results) {
+          console.log('Looking for favs');
+          console.log(result[0].favoris);
+          db.collection("movies").find({id: {$in:result[0].favoris}}).toArray(function (error,results) {
             if (error) throw error;
             res.status(200).send(JSON.stringify(results));
+            console.log(results);
           });
       }
    });
@@ -72,8 +80,7 @@ app.get('/favoris', function(req,res) {
 
 app.get('/movies', function(req,res) {
 
-    var token = req.headers['x-access-token'];
-   console.log('token recu' +token);
+   
 
     db.collection("movies").find().toArray(function(error, results){
       if (error) throw error;
@@ -177,7 +184,7 @@ app.post('/signin', function(req, res) {
       //Check password
       if (req.body.password == result[0].password){
         var token = jwt.sign({id:result[0].username}, settings.secret);
-        console.log('token back: ' + token);
+        
         res.send({success: true, msg:'Welcome back ' + result[0].firstName + ' ' + result[0].lastName,
                 token: token});
       } else {

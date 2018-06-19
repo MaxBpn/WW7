@@ -31,6 +31,7 @@ window.VueWW.navbar = {
             return `/signOut`
         }
     },
+    
     methods: {},
     template: `
     <div class="container">
@@ -61,7 +62,7 @@ window.VueWW.navbar = {
                         <a class="nav-link" id="prochainementPage" data-toggle="tab" href="#prochainement" role="tab" aria-selected="false">PROCHAINEMENT</a>
                     </router-link>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" id="favoris">
                     <router-link v-bind:to="favorisPage">
                         <a class="nav-link" id="favorisPage" data-toggle="tab" href="#favoris" role="tab" aria-selected="false">FAVORIS</a>
                     </router-link>

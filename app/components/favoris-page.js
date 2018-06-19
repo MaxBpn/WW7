@@ -12,7 +12,9 @@ window.VueWW.favorisPage = {
     methods: {
         fetchItems(){
             let uri = 'http://localhost:8080/favoris';
-            this.axios.get(uri).then((response) => {
+            this.axios.get(uri, {
+                headers: {'x-access-token': localStorage.getItem('jwtToken')}
+                }).then((response) => {
                   console.log(response.data)
                   this.movies = response.data;
               });

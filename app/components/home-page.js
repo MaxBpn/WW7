@@ -7,6 +7,11 @@ window.VueWW.homePage = {
         return {   
         };
     },
+    mounted: function(){
+        if (localStorage.getItem('jwtToken') == undefined || localStorage.getItem('jwtToken') == null) {
+            document.getElementById("favoris").style.visibility="hidden";
+        }
+    },
     computed: {
 	},
     template:  `
